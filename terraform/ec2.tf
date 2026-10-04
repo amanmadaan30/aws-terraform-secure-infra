@@ -41,6 +41,12 @@ resource "aws_instance" "tf-ec2-instance" {
   tags = {
     Name = "Node js server"
   }
+
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 1
+  }
 }
 
 resource "aws_security_group" "tf-ec2-sg" {
