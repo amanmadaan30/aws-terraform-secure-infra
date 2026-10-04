@@ -18,7 +18,7 @@ resource "aws_instance" "tf-ec2-instance" {
   #!/bin/bash
   
   #Git clone your repo
-  git clone https://github.com/amanmadaan30/nodejs-aws.git
+  git clone https://github.com/amanmadaan30/aws-terraform-secure-infra.git
 
   # Install Node.js 
   sudo apt update -y
@@ -49,11 +49,11 @@ resource "aws_security_group" "tf-ec2-sg" {
   description = "Allow SSH, HTTPS, and app traffic"
 
   ingress {
-    description = "SSH"
+    description = "SSH from admin IP only" # to enhance security
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] #open to internet
+    cidr_blocks = [var.admin_cidr] #open to internet, earlier "0.0.0.0/0"
   }
 
   ingress {
