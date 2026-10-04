@@ -7,7 +7,7 @@
 */
 
 resource "aws_instance" "tf-ec2-instance" {
-  ami                         = "ami-0a59248a6294cece2" # ubuntu instance
+  ami                         = data.aws_ami.ubuntu.id # ubuntu instance
   instance_type               = "t2.micro"
   associate_public_ip_address = true
   key_name                    = "terraform-ec2"
@@ -23,8 +23,6 @@ resource "aws_instance" "tf-ec2-instance" {
   # Install Node.js 
   sudo apt update -y
   sudo apt install -y nodejs npm
-
-  
 
   # Edit env variables
   echo "DB_HOST=${aws_db_instance.tf_rds_instance.endpoint}" | sudo tee .env
@@ -58,7 +56,7 @@ resource "aws_instance" "tf-ec2-instance" {
 
 resource "aws_security_group" "tf-ec2-sg" {
   name        = "nodejs-server-sg"
-  vpc_id      = "vpc-0eef14b2c7a02fb58" # associate own vpc with security group
+  vpc_id      = var.vpc_id # associate own vpc with security group
   description = "Allow SSH, HTTPS, and app traffic"
 
   ingress {
@@ -95,6 +93,21 @@ resource "aws_security_group" "tf-ec2-sg" {
 
   tags = {
     Name = "nodejs-sg"
+  }
+}
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"] # Canonical
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
   }
 }
 
