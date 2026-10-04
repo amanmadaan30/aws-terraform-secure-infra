@@ -44,8 +44,15 @@ resource "aws_instance" "tf-ec2-instance" {
 
   metadata_options {
     http_endpoint               = "enabled"
-    http_tokens                 = "required"
-    http_put_response_hop_limit = 1
+    http_tokens                 = "required" # imdsv2 requires token setup before making a get request
+    http_put_response_hop_limit = 1          # hop limit 1 ensures packets cannot travel outside the instance
+  }
+
+  root_block_device {
+    encrypted             = true # encrypt volume
+    volume_type           = "gp3"
+    volume_size           = 8
+    delete_on_termination = true
   }
 }
 
