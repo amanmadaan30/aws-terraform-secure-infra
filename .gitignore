@@ -1,0 +1,26 @@
+# Terraform state — contains secrets in plaintext
+*.tfstate
+*.tfstate.*
+.terraform.tfstate.lock.info
+
+# Terraform variable files
+*.tfvars
+*.tfvars.json
+
+# Terraform provider cache — hundreds of MB of binaries
+.terraform/
+
+# Terraform crash logs and overrides
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+
+# Node
+node_modules/
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
